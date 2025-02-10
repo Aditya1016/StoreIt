@@ -5,12 +5,17 @@ import FileUploader from "./FileUploader";
 import { Button } from "./ui/button";
 import { signOutUser } from "@/lib/actions/user.actions";
 
-const Header = () => {
+interface Props{
+  userId: string;
+  accountId: string
+}
+
+const Header = ({userId, accountId}: Props) => {
   return (
     <header className="header">
       <Search />
       <div className="header-wrapper">
-        <FileUploader />
+        <FileUploader ownerId={userId} accountId={accountId} />
         <form action={ async () => { "use server"; await signOutUser() }}>
           <Button type="submit" className="sign-out button">
             <Image
