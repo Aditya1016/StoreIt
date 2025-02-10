@@ -31,7 +31,13 @@ import {
 import { usePathname } from "next/navigation";
 import { FileDetails, ShareInput } from "./ActionsModalContent";
 
-const ActionDropdown = ({ file: initialFile, onFileUpdate }: { file: Models.Document, onFileUpdate: (file: Models.Document | null) => void }) => {
+const ActionDropdown = ({
+  file: initialFile,
+  onFileUpdate,
+}: {
+  file: Models.Document;
+  onFileUpdate?: (file: Models.Document | null) => void;
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [action, setAction] = useState<ActionType | null>(null);
@@ -92,13 +98,13 @@ const ActionDropdown = ({ file: initialFile, onFileUpdate }: { file: Models.Docu
       if (action.value === "rename") {
         const updatedFile = { ...file, name: `${name}.${file.extension}` };
         setFile(updatedFile);
-        onFileUpdate(updatedFile); 
+        if (onFileUpdate) onFileUpdate(updatedFile); // Notify parent component about the update
       } else if (action.value === "share") {
         const updatedFile = { ...file, users: emails };
         setFile(updatedFile);
-        onFileUpdate(updatedFile); 
+        if (onFileUpdate) onFileUpdate(updatedFile); // Notify parent component about the update
       } else if (action.value === "delete") {
-        onFileUpdate(null);
+        if (onFileUpdate) onFileUpdate(null); // Notify parent component about the deletion
       }
       closeAllModals();
     }
@@ -116,7 +122,7 @@ const ActionDropdown = ({ file: initialFile, onFileUpdate }: { file: Models.Docu
     setEmails(updatedEmails);
     const updatedFile = { ...file, users: updatedEmails };
     setFile(updatedFile);
-    onFileUpdate(updatedFile); 
+    if (onFileUpdate) onFileUpdate(updatedFile); // Notify parent component about the update
     closeAllModals();
   };
 
